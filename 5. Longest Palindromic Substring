@@ -1,0 +1,56 @@
+5. Longest Palindromic Substring
+
+Given a string s, return the longest palindromic substring in s.
+
+Example 1:
+
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+Example 2:
+
+Input: s = "cbbd"
+Output: "bb"
+ 
+
+Constraints:
+
+1 <= s.length <= 1000
+s consist of only digits and English letters.
+
+
+
+PROGRAM:
+
+#include <string.h>
+#include <stdlib.h>
+
+char* longestPalindrome(char* s) {
+    int len = strlen(s);
+    if (len < 2) return s;
+
+    int start = 0, maxLen = 1;
+
+    // Helper lambda-style function
+    void expandFromCenter(int left, int right) {
+        while (left >= 0 && right < len && s[left] == s[right]) {
+            if (right - left + 1 > maxLen) {
+                start = left;
+                maxLen = right - left + 1;
+            }
+            left--;
+            right++;
+        }
+    }
+
+    for (int i = 0; i < len; i++) {
+        expandFromCenter(i, i);     // Odd length palindromes
+        expandFromCenter(i, i + 1); // Even length palindromes
+    }
+
+    char* result = (char*)malloc(maxLen + 1);
+    strncpy(result, s + start, maxLen);
+    result[maxLen] = '\0';
+    return result;
+}
+
